@@ -1,0 +1,6 @@
+{
+  "name": "Biometamaterials Lab",
+  "description": "Professional Research Lab Website for Biometamaterials, recruiting graduate and undergraduate students.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
