@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight, Maximize2, X, RefreshCw, Layers, Cpu, Award } from "lucide-react";
 
 // Import local exact research images provided by user
-import r1Image from "../assets/images/r1-2.png";
+import r1Image from "../assets/images/r1.png";
 import r2Image from "../assets/images/r2-2.png";
 import r3Image from "../assets/images/r3-2.png";
 import r4Image from "../assets/images/r4-2.png";
@@ -207,12 +207,12 @@ export default function ResearchSlides() {
         </div>
 
         {/* Core Showcase Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch min-h-[500px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
           {/* Left: Slide Visualization */}
-          <div className="lg:col-span-6 xl:col-span-7 flex flex-col justify-center">
+          <div className="lg:col-span-6 xl:col-span-7">
             <div 
-              className="relative aspect-video lg:aspect-[4/3] w-full rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-900 group"
+              className="relative aspect-video lg:aspect-[4/3] w-full rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-white group"
               onMouseEnter={() => setIsAutoplay(false)}
               onMouseLeave={() => isAutoplay && setIsAutoplay(true)}
             >
@@ -294,7 +294,7 @@ export default function ResearchSlides() {
                     <img
                       src={currentSlide.imagePath}
                       alt={currentSlide.title}
-                      className="w-full h-full object-contain bg-slate-900 select-none cursor-pointer"
+                      className="w-full h-full object-contain bg-white select-none cursor-pointer"
                       onClick={() => setIsZoomed(true)}
                       onError={() => handleImageError(currentSlide.id)}
                       referrerPolicy="no-referrer"
@@ -321,49 +321,51 @@ export default function ResearchSlides() {
 
           {/* Right: Rich Informative Panel */}
           <div className="lg:col-span-6 xl:col-span-5 flex flex-col justify-between">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -25 }}
-                transition={{ duration: 0.35 }}
-                className="space-y-6 flex-grow flex flex-col justify-center py-4"
-              >
-                <div>
-                  <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 text-xs font-semibold rounded-full bg-gradient-to-r ${currentSlide.colorTheme} text-white shadow-xs`}>
-                    <Award size={13} />
-                    {currentSlide.techBadge}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-900 leading-tight mb-2 font-sans tracking-tight">
-                    {currentSlide.title}
-                  </h3>
-                  <h4 className="text-base font-semibold text-slate-600 leading-relaxed">
-                    {currentSlide.subtitle}
-                  </h4>
-                </div>
-
-                <div className="h-[1px] w-full bg-slate-200/80"></div>
-
-                <p className="text-sm text-slate-500 leading-relaxed font-normal flex-grow">
-                  {currentSlide.description}
-                </p>
-
-                <div className="p-4 bg-white border border-slate-100 rounded-xl space-y-2.5">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">Scientific Publication Citation</div>
-                  <div className="text-xs font-semibold text-slate-800 leading-relaxed">
-                    "{currentSlide.paper}"
+            <div className="min-h-[510px] sm:min-h-[440px] md:min-h-[420px] lg:min-h-[500px] xl:min-h-[460px] flex flex-col justify-center">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -25 }}
+                  transition={{ duration: 0.35 }}
+                  className="space-y-6 flex-grow flex flex-col justify-center py-4"
+                >
+                  <div>
+                    <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 text-xs font-semibold rounded-full bg-gradient-to-r ${currentSlide.colorTheme} text-white shadow-xs`}>
+                      <Award size={13} />
+                      {currentSlide.techBadge}
+                    </span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-                    <span className="font-bold text-indigo-600">{currentSlide.journal}</span>
-                    <span>Accepted Year: {currentSlide.year}</span>
+
+                  <div>
+                    <h3 className="text-2xl font-bold text-slate-900 leading-tight mb-2 font-sans tracking-tight">
+                      {currentSlide.title}
+                    </h3>
+                    <h4 className="text-base font-semibold text-slate-600 leading-relaxed">
+                      {currentSlide.subtitle}
+                    </h4>
                   </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+
+                  <div className="h-[1px] w-full bg-slate-200/80"></div>
+
+                  <p className="text-sm text-slate-500 leading-relaxed font-normal flex-grow">
+                    {currentSlide.description}
+                  </p>
+
+                  <div className="p-4 bg-white border border-slate-100 rounded-xl space-y-2.5">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">Scientific Publication Citation</div>
+                    <div className="text-xs font-semibold text-slate-800 leading-relaxed">
+                      "{currentSlide.paper}"
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                      <span className="font-bold text-indigo-600">{currentSlide.journal}</span>
+                      <span>Accepted Year: {currentSlide.year}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
             {/* Quick slide shortcut index switcher */}
             <div className="border-t border-slate-200/60 pt-6 mt-6">

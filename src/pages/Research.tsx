@@ -12,7 +12,7 @@ export default function Research() {
 
       <SectionHeader 
         title="Research Fields" 
-        subtitle="우리는 바이오 메타물질을 통해 미래 의료의 새로운 패러다임을 제시하며, 혁신적인 기초 연구와 응용 연구를 병행합니다."
+        subtitle="생체메타물질 연구실은 생체 구조 속 빛의 거동을 이해하고 제어하여 생체재료, 나노포토닉스, 계산과학, 의공학과 융합해 차세대 정밀의료 기술을 개발합니다."
       />
 
       <div className="space-y-32 mt-20">

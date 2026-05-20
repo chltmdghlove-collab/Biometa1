@@ -47,14 +47,13 @@ export default function Publication() {
               >
                 <div className="flex flex-col md:flex-row h-full">
                   {pub.image && (
-                    <div className="md:w-72 lg:w-96 flex-shrink-0 overflow-hidden relative border-r border-slate-100">
+                    <div className="md:w-72 lg:w-96 flex-shrink-0 overflow-hidden relative border-r border-slate-100 bg-white flex items-center justify-center p-3">
                       <img 
                         src={pub.image} 
                         alt={pub.title}
-                        className="w-full h-48 md:h-full object-contain bg-slate-50 transition-transform duration-500 group-hover:scale-105"
+                        className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-105"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors"></div>
                     </div>
                   )}
                   <div className="flex-grow p-8 flex flex-col justify-between">

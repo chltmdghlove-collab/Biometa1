@@ -43,10 +43,18 @@ export interface NewsItem {
   content: string;
 }
 
+export interface GalleryItem {
+  id: string;
+  date: string;
+  title: string;
+  content: string;
+  image: string;
+}
+
 export const labData = {
   labName: "Biometamaterials Lab",
-  vision: "생체 모사 메타물질을 통한 차세대 의료 솔루션 개발",
-  subtitle: "본 연구실은 자연계에 존재하지 않는 인공적인 물성을 가진 메타물질을 설계하고, 이를 생체 시스템과 결합하여 난치병 치료 및 정밀 진단을 위한 혁신적인 플랫폼을 구축합니다.",
+  vision: "BIOMETAMATERIALS FOR PRECISION MEDICINE",
+  subtitle: "Our lab focuses on understanding and controlling light confinement, transport, and amplification in biological structures to search unique implications at the interface of the multiple disciplines of biomedical engineering, mesoscopic physics, material science, nonlinear dynamics, computational science, laser physics, chemistry, biology, nanophotonics, and biophotonics.",
   professor: {
     name: "최승호",
     englishName: "Seung Ho Choi, Ph. D.",
@@ -63,7 +71,6 @@ export const labData = {
     careers: [
       "2023–present: Associate Professor, Department of Biomedical Engineering, Yonsei University, Wonju, Republic of Korea",
       "2023–present: Associate Professor, Department of Integrative Medicine, Major in Digital Healthcare, Yonsei University College of Medicine, Seoul, Republic of Korea",
-      "2024: Head of Department, Department of Biomedical Engineering, Yonsei University, Wonju, Republic of Korea",
       "2019–2023: Assistant Professor, Department of Biomedical Engineering, Yonsei University, Wonju, Republic of Korea",
       "2016–2018: Post-Doctoral Research Fellow, Weldon School of Biomedical Engineering, Purdue University, West Lafayette, IN"
     ],
@@ -657,17 +664,40 @@ export const labData = {
   news: [
     {
       id: "n1",
-      date: "2024.05.15",
-      title: "최승호 교수, '올해의 젊은 과학자상' 수상",
-      content: "본 연구실의 최승호 교수님께서 바이오 메타물질 분야의 공로를 인정받아 수상하셨습니다."
+      date: "2026.05.15",
+      title: "최승호 교수, 의계광학 및 바이오포토닉스 학술대회 초청강연",
+      content: "의공학부 최승호 교수가 2026 의계광학 학술제에 초청받아 '생체 메타물질 내 Anderson 광 국소화의 원리와 정밀의료의 미래'를 주제로 세미나 발표를 진행하였습니다."
     },
     {
       id: "n2",
-      date: "2024.04.01",
-      title: "2024년 하반기 신입 대학원생 모집 안내",
-      content: "본 연구실과 함께 성장할 열정적인 학생분들의 많은 지원 부탁드립니다."
+      date: "2026.04.10",
+      title: "2026년 후기 신입 대학원생 모집 안내 (석·박사 통합과정)",
+      content: "본 연구실에서 생체재료, 나노포토닉스, 의공학 분야 연구를 함께 이어나갈 전일제 대학원 신입생을 모집합니다. 학부생 연구참여(인턴십) 프로그램도 진행 중이오니 편하게 지원 바랍니다."
     }
   ] as NewsItem[],
+  gallery: [
+    {
+      id: "g1",
+      date: "2026.05.10",
+      title: "2026년 봄학기 연구실 단체 야유회 및 세미나",
+      content: "캠퍼스 야외 잔디밭에서 봄맞이 점심 피크닉을 갖고 신규 연구 과제 아이디어 및 상반기 진행 성과 공유를 위한 통합 세미나를 진행했습니다. 모든 멤버들이 한자리에 모여 뜻깊은 시간을 보냈습니다.",
+      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
+    },
+    {
+      id: "g2",
+      date: "2026.04.18",
+      title: "춘계 의공학 정기 공동 학술세미나 발표 및 기념조",
+      content: "저희 연구실 대학원 멤버들이 이번 춘계 학술대회 세션에 대거 참여하여 우수한 리서치 포스터를 발표했습니다. 활발한 학문적 논의 후, 다 함께 기념사진을 남겼습니다.",
+      image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200"
+    },
+    {
+      id: "g3",
+      date: "2026.03.02",
+      title: "신임 연구 멤버 환영식 & 랩 마일스톤 데이 정기 회식",
+      content: "새롭게 합류하게 된 연구원 및 인턴 학생들을 축하하고 올 한 해 추진할 원대한 연구 이정표 달성을 다짐하는 연구실 정기 회식을 가졌습니다. 새로운 학기에도 멋진 패러다임을 열어갑니다!",
+      image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1200"
+    }
+  ] as GalleryItem[],
   collaborators: [
     { name: "AFRL (Air Force Research Lab)", id: "afrl" },
     { name: "한국연구재단 (NRF)", id: "nrf" },
@@ -684,3 +714,36 @@ export const labData = {
     email: "seunghochoi@yonsei.ac.kr"
   }
 };
+
+// Helper functions for dynamic client-side state of News and Gallery
+export function getSavedNews(): NewsItem[] {
+  const data = localStorage.getItem("lab_news");
+  if (data) {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      // ignore
+    }
+  }
+  return [...labData.news];
+}
+
+export function saveNews(newsList: NewsItem[]): void {
+  localStorage.setItem("lab_news", JSON.stringify(newsList));
+}
+
+export function getSavedGallery(): GalleryItem[] {
+  const data = localStorage.getItem("lab_gallery");
+  if (data) {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      // ignore
+    }
+  }
+  return [...labData.gallery];
+}
+
+export function saveGallery(galleryList: GalleryItem[]): void {
+  localStorage.setItem("lab_gallery", JSON.stringify(galleryList));
+}
