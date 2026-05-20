@@ -11,11 +11,13 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isMocked, setIsMocked] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setIsMocked(false);
 
     try {
       const response = await fetch("/api/contact", {
@@ -27,9 +29,11 @@ export default function Contact() {
       const data = await response.json();
 
       if (data.success) {
+        setIsMocked(!!data.isMock);
         setSubmitted(true);
         setFormState({ name: "", email: "", subject: "", message: "" });
-        setTimeout(() => setSubmitted(false), 5000);
+        // Keep notice visible longer if mocked so user can read instructions
+        setTimeout(() => setSubmitted(false), data.isMock ? 12000 : 6000);
       } else {
         setError(data.message || "전송에 실패했습니다. 다시 시도해 주세요.");
       }
@@ -170,12 +174,37 @@ export default function Contact() {
               <p className="text-sm text-red-500 font-medium px-1">{error}</p>
             )}
 
+            {submitted && isMocked && (
+              <div className="p-4 bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 rounded-xl text-sm leading-relaxed space-y-1.5 transition-all">
+                <p className="font-bold flex items-center gap-1.5 text-amber-800 dark:text-amber-300">
+                  ⚠️ 실제 이메일전송 불가 (시뮬레이션 전송됨)
+                </p>
+                <p className="text-xs">
+                  현재 AI Studio의 <strong>RESEND_API_KEY</strong> 환경 변수(인프라 비밀 키)가 비어 있거나 올바르지 않아 가상 전송이 접수되었습니다.
+                </p>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed bg-slate-50 dark:bg-slate-900 p-2 rounded border border-slate-100 dark:border-slate-800">
+                  <strong>실제 연동을 완료하려면:</strong> AI Studio 창 우측 상단의 <strong>Settings (톱니바퀴 아이콘) &gt; Secrets</strong> 패널에서 <code>RESEND_API_KEY</code> 이름으로 Resend API 키를 빈 공간 없이 등록해주세요!
+                </p>
+              </div>
+            )}
+
+            {submitted && !isMocked && (
+              <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-400 rounded-xl text-sm leading-relaxed transition-all">
+                <p className="font-bold flex items-center gap-1.5">
+                  ✨ 이메일 발송 완료!
+                </p>
+                <p className="text-xs mt-1">
+                  문의 사항이 지정된 이메일 계정({labData.contact.email})으로 정상 발송되었습니다. 신속하게 확인 후 답장 드리겠습니다!
+                </p>
+              </div>
+            )}
+
             <button 
               type="submit" 
               className="w-full btn-primary flex justify-center items-center py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={submitted || loading}
             >
-              {loading ? "전송 중..." : submitted ? "전송 완료!" : (
+              {loading ? "전송 중..." : submitted ? "접수 완료" : (
                 <>
                   Send Message <Send size={18} className="ml-2" />
                 </>

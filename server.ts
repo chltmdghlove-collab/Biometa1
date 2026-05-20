@@ -56,19 +56,20 @@ async function startServer() {
           text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
         });
         
-        res.json({ success: true, message: "문의가 성공적으로 전송되었습니다." });
+        res.json({ success: true, isMock: false, message: "문의가 성공적으로 실제 이메일로 전송되었습니다." });
       } else {
         // Fallback for when API keys are not set yet
         console.warn("RESEND_API_KEY is not set. Email not sent, but received the inquiry.");
         res.json({ 
           success: true, 
-          message: "문의가 접수되었습니다. (API 키 설정 대기 중)",
+          isMock: true,
+          message: "RESEND_API_KEY 환경변수가 설정되어 있지 않습니다. 모의 데이터로 시뮬레이션 전송되었습니다.",
           preview: { name, email, subject, message, recipient }
         });
       }
     } catch (error: any) {
       console.error("Failed to send email:", error);
-      res.status(500).json({ success: false, message: "서버 오류로 전송에 실패했습니다." });
+      res.status(500).json({ success: false, message: `이메일 전송 중 오류 발생: ${error.message || error}` });
     }
   });
 
