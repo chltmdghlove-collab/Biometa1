@@ -27,11 +27,30 @@ export default function Research() {
           >
             <div className="w-full lg:w-1/2">
               <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl relative">
-                <img 
-                  src={field.image} 
-                  className="w-full h-full object-cover" 
-                  alt={field.title} 
-                />
+                {field.image && (
+                  field.image.toLowerCase().endsWith('.mov') || 
+                  field.image.toLowerCase().endsWith('.mp4') || 
+                  field.image.toLowerCase().endsWith('.webm') || 
+                  field.image.toLowerCase().includes('.mov?') || 
+                  field.image.toLowerCase().includes('.mp4?') || 
+                  field.image.toLowerCase().includes('meta.mov')
+                ) ? (
+                  <video 
+                    src={field.image} 
+                    className="w-full h-full object-cover" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    controls
+                  />
+                ) : (
+                  <img 
+                    src={field.image} 
+                    className="w-full h-full object-cover" 
+                    alt={field.title} 
+                  />
+                )}
                 <div className="absolute top-6 left-6 px-4 py-1 bg-primary text-white text-xs font-bold uppercase tracking-widest rounded-full">
                   Topic {i + 1}
                 </div>
@@ -48,8 +67,8 @@ export default function Research() {
               <div className="pt-4">
                 <div className="h-1 w-20 bg-primary/20"></div>
               </div>
-              <p className="text-slate-600 leading-bold">
-                본 분야에서는 자연계의 기계적 메커니즘을 심도 있게 분석하고, 이를 인공적인 나노/마이크로 구조체에 이식하여 극도의 물성 제어를 달성하는 것을 목표로 합니다. 특히 생체 적합성 고분자와 하이드로젤을 메타물질 구조와 결합하여, 인체 내부의 복잡한 물리적 신호를 모방하거나 제어하는 원천 기술을 확보하고 있습니다.
+              <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+                {field.details}
               </p>
             </div>
           </motion.div>

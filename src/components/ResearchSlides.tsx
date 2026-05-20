@@ -165,9 +165,9 @@ export default function ResearchSlides() {
               Slide Presentation
             </div>
             <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">
-              Research Progress & Slides
+              Current Research & Presentations
               <span className="block text-slate-500 text-lg font-normal mt-2">
-                최신 학계 보고 원천 데이터를 슬라이드 자료 및 개요를 통해 소개합니다.
+                현재 수행중인 연구를 소개합니다.
               </span>
             </h2>
           </div>
@@ -321,7 +321,7 @@ export default function ResearchSlides() {
 
           {/* Right: Rich Informative Panel */}
           <div className="lg:col-span-6 xl:col-span-5 flex flex-col justify-between">
-            <div className="min-h-[510px] sm:min-h-[440px] md:min-h-[420px] lg:min-h-[500px] xl:min-h-[460px] flex flex-col justify-center">
+            <div className="h-[520px] sm:h-[455px] md:h-[415px] lg:h-[495px] xl:h-[455px] flex flex-col justify-start">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentIndex}
@@ -329,7 +329,7 @@ export default function ResearchSlides() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -25 }}
                   transition={{ duration: 0.35 }}
-                  className="space-y-6 flex-grow flex flex-col justify-center py-4"
+                  className="space-y-6 flex-grow flex flex-col justify-start py-4"
                 >
                   <div>
                     <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 text-xs font-semibold rounded-full bg-gradient-to-r ${currentSlide.colorTheme} text-white shadow-xs`}>
@@ -349,20 +349,9 @@ export default function ResearchSlides() {
 
                   <div className="h-[1px] w-full bg-slate-200/80"></div>
 
-                  <p className="text-sm text-slate-500 leading-relaxed font-normal flex-grow">
+                  <p className="text-sm text-slate-500 leading-relaxed font-normal overflow-y-auto max-h-[120px] sm:max-h-[110px] lg:max-h-[135px] pr-1 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
                     {currentSlide.description}
                   </p>
-
-                  <div className="p-4 bg-white border border-slate-100 rounded-xl space-y-2.5">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">Scientific Publication Citation</div>
-                    <div className="text-xs font-semibold text-slate-800 leading-relaxed">
-                      "{currentSlide.paper}"
-                    </div>
-                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-                      <span className="font-bold text-indigo-600">{currentSlide.journal}</span>
-                      <span>Accepted Year: {currentSlide.year}</span>
-                    </div>
-                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -507,14 +496,6 @@ export default function ResearchSlides() {
                 <ChevronRight size={28} />
               </button>
 
-            </div>
-
-            {/* Bottom Citation inside Lightbox */}
-            <div className="w-full max-w-5xl mx-auto pb-4 text-center z-10">
-              <p className="text-xs text-slate-400 font-mono tracking-wide leading-relaxed">
-                <span className="font-bold text-slate-200">Abstract Citation: </span>
-                {currentSlide.paper} ({currentSlide.journal}, {currentSlide.year})
-              </p>
             </div>
 
           </motion.div>

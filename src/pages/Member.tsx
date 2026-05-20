@@ -4,6 +4,7 @@ import { labData, Member as MemberType } from "../data/mockData";
 import SectionHeader from "../components/SectionHeader";
 import MemberCard from "../components/MemberCard";
 import { Helmet } from "react-helmet-async";
+import groupPhotoBg from "../assets/images/단체사진.png";
 import { 
   Award, 
   GraduationCap, 
@@ -135,6 +136,147 @@ export default function Member() {
     return cleanName.slice(0, 2).toUpperCase();
   };
 
+  const renderFilterBlock = () => (
+    <div className="max-w-7xl mx-auto px-6 mb-12">
+      <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-6">
+        
+        {/* TOP: Search Bar and Category selection in beautiful harmony + View Mode Switcher */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+          
+          {/* Left side: Category Title */}
+          <div>
+            <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest pl-0.5 mb-1">
+              <span>연구원 분류 필터 • Select Role Group</span>
+            </div>
+            <p className="text-xs text-slate-400 font-semibold">원하는 직급을 선택하거나 우측에서 보기 형식을 변경해 보세요.</p>
+          </div>
+
+          {/* Right side: Modern Live Search Bar & View Mode Toggle */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:max-w-xl">
+            {/* Live Search */}
+            <div className="relative flex-grow focus-within:scale-[1.01] transition-transform duration-300">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+              <input
+                type="text"
+                placeholder="이름, 영어이름, 국가명, 연구내용으로 실시간 검색..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl pl-10 pr-4 py-2.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary/50 transition-all text-slate-800 placeholder-slate-400"
+              />
+              {searchTerm && (
+                <button 
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold uppercase cursor-pointer"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            {/* View Mode Switcher */}
+            <div className="flex items-center bg-slate-50 p-1.5 rounded-xl border border-slate-200/50 self-start sm:self-auto shrink-0">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`p-2 rounded-lg transition-all ${viewMode === "grid" ? "bg-white text-slate-900 shadow-sm font-semibold" : "text-slate-400 hover:text-slate-600"}`}
+                title="Grid View"
+              >
+                <Grid size={16} />
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className={`p-2 rounded-lg transition-all ${viewMode === "list" ? "bg-white text-slate-900 shadow-sm font-semibold" : "text-slate-400 hover:text-slate-600"}`}
+                title="Academic List View"
+              >
+                <List size={16} />
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* MID: Tabs representation */}
+        <div className="flex flex-wrap gap-2 md:gap-3">
+          {filterTabs.map((tab) => {
+            const TabIcon = tab.icon;
+            const isSelected = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setSelectedCountry(null); // Clear country selection to avoid redundant zero states
+                }}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold tracking-tight transition-all duration-300 transform cursor-pointer ${
+                  isSelected
+                    ? tab.activeBg
+                    : "bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200/50"
+                }`}
+              >
+                <TabIcon size={14} className={isSelected ? "text-white" : "text-slate-500"} />
+                <span className="flex items-center gap-1.5">
+                  <span>{tab.koLabel}</span>
+                  <span className="opacity-60 font-semibold text-[10px] md:text-xs">({tab.enLabel})</span>
+                </span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold leading-none ${
+                  isSelected ? "bg-white/25 text-white" : "bg-slate-200/80 text-slate-700"
+                }`}>
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* BOTTOM: Global Country Flags Filter widget */}
+        <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-100/80">
+          <div className="flex items-center gap-1.5 text-[11px] font-black tracking-widest uppercase text-slate-400 mb-3 pl-1">
+            <Compass size={13} className="text-slate-500" />
+            <span>글로벌 여권 필터링 • Interactive Passport Filter</span>
+          </div>
+          <div className="flex flex-wrap gap-2 items-center">
+            <button
+              onClick={() => setSelectedCountry(null)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                !selectedCountry 
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-slate-600 border border-slate-200/60 hover:border-slate-300"
+              }`}
+            >
+              All Countries ({uniqueNationalities.length})
+            </button>
+            {uniqueNationalities.map((countryName) => {
+              const isSelected = selectedCountry === countryName;
+              const countOfCountry = members.filter((m) => m.country === countryName).length;
+              return (
+                <button
+                  key={countryName}
+                  onClick={() => setSelectedCountry(isSelected ? null : countryName)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer hover:border-primary/40 ${
+                    isSelected 
+                      ? "bg-indigo-600 text-white shadow-sm scale-110 ring-2 ring-indigo-500/10" 
+                      : "bg-white text-slate-600 border border-slate-200/60 hover:bg-slate-100"
+                  }`}
+                >
+                  <span>{countryName}</span>
+                  <span className={`text-[9.5px] px-1 py-0.2 rounded-md ${isSelected ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500 font-extrabold"}`}>
+                    {countOfCountry}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {selectedCountry && (
+            <p className="text-[11px] text-indigo-600 font-bold mt-2.5 pl-1 flex items-center gap-1">
+              <CheckCircle2 size={12} />
+              <span>{selectedCountry} 국적 멤버들만 필터링되어 탐색 중입니다.</span>
+            </p>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+
   return (
     <div className="section-padding bg-slate-50/40 relative min-h-screen">
       <Helmet>
@@ -143,149 +285,11 @@ export default function Member() {
 
       <SectionHeader 
         title="Our Members" 
-        subtitle="We are a global research society composed of talents from around the world who respect diversity and work together toward shared goals, while actively recruiting international students to globalize our research team and strengthen its global competitiveness."
+        subtitle="연세대학교 의공학부 생체메타물질 연구실은 세계 최고의 기술 역량을 지닌 글로벌 인재들이 모인 열린 커뮤니티입니다. 서로 소통하고 격려하며 새로운 학술적 발견을 선도합니다."
       />
 
 
-      {/* Beautiful Interactive Filters block (Tabs + Dynamic Search + View Mode Switcher + Passport Selector) */}
-      <div className="max-w-7xl mx-auto px-6 mb-12">
-        <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-6">
-          
-          {/* TOP: Search Bar and Category selection in beautiful harmony + View Mode Switcher */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
-            
-            {/* Left side: Category Title */}
-            <div>
-              <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest pl-0.5 mb-1">
-                <span>연구원 분류 필터 • Select Role Group</span>
-              </div>
-              <p className="text-xs text-slate-400 font-semibold">원하는 직급을 선택하거나 우측에서 보기 형식을 변경해 보세요.</p>
-            </div>
-
-            {/* Right side: Modern Live Search Bar & View Mode Toggle */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:max-w-xl">
-              {/* Live Search */}
-              <div className="relative flex-grow focus-within:scale-[1.01] transition-transform duration-300">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                <input
-                  type="text"
-                  placeholder="이름, 영어이름, 국가명, 연구내용으로 실시간 검색..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl pl-10 pr-4 py-2.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary/50 transition-all text-slate-800 placeholder-slate-400"
-                />
-                {searchTerm && (
-                  <button 
-                    onClick={() => setSearchTerm("")}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold uppercase cursor-pointer"
-                  >
-                    Clear
-                  </button>
-                )}
-              </div>
-
-              {/* View Mode Switcher */}
-              <div className="flex items-center bg-slate-50 p-1.5 rounded-xl border border-slate-200/50 self-start sm:self-auto shrink-0">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded-lg transition-all ${viewMode === "grid" ? "bg-white text-slate-900 shadow-sm font-semibold" : "text-slate-400 hover:text-slate-600"}`}
-                  title="Grid View"
-                >
-                  <Grid size={16} />
-                </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 rounded-lg transition-all ${viewMode === "list" ? "bg-white text-slate-900 shadow-sm font-semibold" : "text-slate-400 hover:text-slate-600"}`}
-                  title="Academic List View"
-                >
-                  <List size={16} />
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-          {/* MID: Tabs representation */}
-          <div className="flex flex-wrap gap-2 md:gap-3">
-            {filterTabs.map((tab) => {
-              const TabIcon = tab.icon;
-              const isSelected = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    setSelectedCountry(null); // Clear country selection to avoid redundant zero states
-                  }}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold tracking-tight transition-all duration-300 transform cursor-pointer ${
-                    isSelected
-                      ? tab.activeBg
-                      : "bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200/50"
-                  }`}
-                >
-                  <TabIcon size={14} className={isSelected ? "text-white" : "text-slate-500"} />
-                  <span className="flex items-center gap-1.5">
-                    <span>{tab.koLabel}</span>
-                    <span className="opacity-60 font-semibold text-[10px] md:text-xs">({tab.enLabel})</span>
-                  </span>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold leading-none ${
-                    isSelected ? "bg-white/25 text-white" : "bg-slate-200/80 text-slate-700"
-                  }`}>
-                    {tab.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* BOTTOM: Global Country Flags Filter widget */}
-          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-100/80">
-            <div className="flex items-center gap-1.5 text-[11px] font-black tracking-widest uppercase text-slate-400 mb-3 pl-1">
-              <Compass size={13} className="text-slate-500" />
-              <span>글로벌 여권 필터링 • Interactive Passport Filter</span>
-            </div>
-            <div className="flex flex-wrap gap-2 items-center">
-              <button
-                onClick={() => setSelectedCountry(null)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  !selectedCountry 
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "bg-white text-slate-600 border border-slate-200/60 hover:border-slate-300"
-                }`}
-              >
-                All Countries ({uniqueNationalities.length})
-              </button>
-              {uniqueNationalities.map((countryName) => {
-                const isSelected = selectedCountry === countryName;
-                const countOfCountry = members.filter((m) => m.country === countryName).length;
-                return (
-                  <button
-                    key={countryName}
-                    onClick={() => setSelectedCountry(isSelected ? null : countryName)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer hover:border-primary/40 ${
-                      isSelected 
-                        ? "bg-indigo-600 text-white shadow-sm scale-110 ring-2 ring-indigo-500/10" 
-                        : "bg-white text-slate-600 border border-slate-200/60 hover:bg-slate-100"
-                    }`}
-                  >
-                    <span>{countryName}</span>
-                    <span className={`text-[9.5px] px-1 py-0.2 rounded-md ${isSelected ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500 font-extrabold"}`}>
-                      {countOfCountry}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-            {selectedCountry && (
-              <p className="text-[11px] text-indigo-600 font-bold mt-2.5 pl-1 flex items-center gap-1">
-                <CheckCircle2 size={12} />
-                <span>{selectedCountry} 국적 멤버들만 필터링되어 탐색 중입니다.</span>
-              </p>
-            )}
-          </div>
-
-        </div>
-      </div>
+      {/* Search / Filter widget moved above Alumni / directory view below */}
 
       {/* Main Members Showcasing area */}
       <div className="max-w-7xl mx-auto px-6 mb-24">
@@ -436,6 +440,9 @@ export default function Member() {
                   </motion.div>
                 )}
 
+                {/* Beautiful Interactive Filters block (Tabs + Dynamic Search + View Mode Switcher + Passport Selector) */}
+                {renderFilterBlock()}
+
                 {/* Category 5: Alumni */}
                 {alumniMembers.length > 0 && (
                   <motion.div 
@@ -465,85 +472,120 @@ export default function Member() {
               </motion.div>
             ) : (
               /* --- EXQUISITE ACADEMIC LIST DIRECTORY VIEW MODE --- */
-              <motion.div 
-                layout 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="bg-white border border-slate-150/60 rounded-3xl overflow-hidden shadow-sm divide-y divide-slate-100"
-              >
-                {/* Table Header Row */}
-                <div className="hidden md:grid grid-cols-12 gap-4 px-8 py-4 bg-slate-50 text-[11px] font-black tracking-widest text-slate-400 uppercase select-none">
-                  <div className="col-span-5 flex items-center gap-2">Name & Role</div>
-                  <div className="col-span-2">Nationality</div>
-                  <div className="col-span-4">Academic Background & Education</div>
-                  <div className="col-span-1 text-right">Details</div>
-                </div>
+              <div className="space-y-6">
+                {renderFilterBlock()}
+                <motion.div 
+                  layout 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="bg-white border border-slate-150/60 rounded-3xl overflow-hidden shadow-sm divide-y divide-slate-100"
+                >
+                  {/* Table Header Row */}
+                  <div className="hidden md:grid grid-cols-12 gap-4 px-8 py-4 bg-slate-50 text-[11px] font-black tracking-widest text-slate-400 uppercase select-none">
+                    <div className="col-span-5 flex items-center gap-2">Name & Role</div>
+                    <div className="col-span-2">Nationality</div>
+                    <div className="col-span-4">Academic Background & Education</div>
+                    <div className="col-span-1 text-right">Details</div>
+                  </div>
 
-                {/* Directory Content Row mapping */}
-                {filteredMembers.map((member) => {
-                  const hasImage = member.image && !member.image.endsWith(".jpg") && member.image.includes("/");
-                  return (
-                    <motion.div
-                      key={member.id}
-                      onClick={() => setSelectedMember(member)}
-                      className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center px-6 md:px-8 py-5 hover:bg-slate-50/75 transition-all cursor-pointer group"
-                    >
-                      {/* Name Card Section */}
-                      <div className="col-span-1 md:col-span-5 flex items-center gap-4">
-                        <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 bg-slate-100/85 border border-slate-200/50 flex items-center justify-center">
-                          {hasImage ? (
-                            <img src={member.image} alt={member.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                          ) : (
-                            <span className="text-[11px] font-black tracking-tight text-slate-500">{getInitials(member.name)}</span>
-                          )}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors leading-none">
-                              {member.name}
-                            </h4>
-                            <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.2 bg-slate-100 text-slate-500 rounded border border-slate-200/30">
-                              {roleLabels[member.role] || member.role}
-                            </span>
+                  {/* Directory Content Row mapping */}
+                  {filteredMembers.map((member) => {
+                    const hasImage = member.image && !member.image.endsWith(".jpg") && member.image.includes("/");
+                    return (
+                      <motion.div
+                        key={member.id}
+                        onClick={() => setSelectedMember(member)}
+                        className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center px-6 md:px-8 py-5 hover:bg-slate-50/75 transition-all cursor-pointer group"
+                      >
+                        {/* Name Card Section */}
+                        <div className="col-span-1 md:col-span-5 flex items-center gap-4">
+                          <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 bg-slate-100/85 border border-slate-200/50 flex items-center justify-center">
+                            {hasImage ? (
+                              <img src={member.image} alt={member.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                            ) : (
+                              <span className="text-[11px] font-black tracking-tight text-slate-500">{getInitials(member.name)}</span>
+                            )}
                           </div>
-                          {member.englishName && (
-                            <span className="text-[10px] text-slate-400 font-medium block mt-1">{member.englishName}</span>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors leading-none">
+                                {member.name}
+                              </h4>
+                              <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.2 bg-slate-100 text-slate-500 rounded border border-slate-200/30">
+                                {roleLabels[member.role] || member.role}
+                              </span>
+                            </div>
+                            {member.englishName && (
+                              <span className="text-[10px] text-slate-400 font-medium block mt-1">{member.englishName}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Nationality Tag */}
+                        <div className="col-span-1 md:col-span-2 flex items-center gap-2">
+                          <span className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                            <Globe2 size={12} className="text-slate-400" />
+                            {member.country || "Korea"}
+                          </span>
+                        </div>
+
+                        {/* Education row info */}
+                        <div className="col-span-1 md:col-span-4 text-xs text-slate-500 leading-relaxed font-light">
+                          {member.education && member.education.length > 0 ? (
+                            <span className="truncate block max-w-sm" title={member.education.join(", ")}>
+                              {member.education.join(" • ")}
+                            </span>
+                          ) : (
+                            <span className="text-slate-300 italic">No record</span>
                           )}
                         </div>
-                      </div>
 
-                      {/* Nationality Tag */}
-                      <div className="col-span-1 md:col-span-2 flex items-center gap-2">
-                        <span className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
-                          <Globe2 size={12} className="text-slate-400" />
-                          {member.country || "Korea"}
-                        </span>
-                      </div>
-
-                      {/* Education row info */}
-                      <div className="col-span-1 md:col-span-4 text-xs text-slate-500 leading-relaxed font-light">
-                        {member.education && member.education.length > 0 ? (
-                          <span className="truncate block max-w-sm" title={member.education.join(", ")}>
-                            {member.education.join(" • ")}
+                        {/* CTA Right Indicator */}
+                        <div className="col-span-1 md:col-span-1 text-right flex justify-end">
+                          <span className="p-1 px-1.5 bg-slate-100 text-slate-400 rounded-lg group-hover:bg-primary group-hover:text-white transition-all">
+                            <ChevronRight size={14} />
                           </span>
-                        ) : (
-                          <span className="text-slate-300 italic">No record</span>
-                        )}
-                      </div>
-
-                      {/* CTA Right Indicator */}
-                      <div className="col-span-1 md:col-span-1 text-right flex justify-end">
-                        <span className="p-1 px-1.5 bg-slate-100 text-slate-400 rounded-lg group-hover:bg-primary group-hover:text-white transition-all">
-                          <ChevronRight size={14} />
-                        </span>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </motion.div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              </div>
             )}
           </AnimatePresence>
         )}
+      </div>
+
+      {/* Elegant Bottom Background Overlay Banner with Full uncropped group photo */}
+      <div className="max-w-7xl mx-auto px-6 mb-16 space-y-6">
+        {/* Elegant Content Frame */}
+        <div className="relative z-10 space-y-4 max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 text-center shadow-xs">
+          <span className="inline-block px-3 py-1 rounded-full bg-rose-50 text-[#e40428] text-[9px] font-mono tracking-[0.25em] font-extrabold uppercase shadow-xs">
+            YONSEI BIOMETAMATERIALS TEAM
+          </span>
+          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight font-sans">
+            "We Shape the Future of Biometamaterials Together"
+          </h3>
+          <p className="text-xs text-slate-600 font-medium leading-relaxed">
+            연세대학교 의공학부 생체메타물질 연구실은 세계 최고의 기술 역량을 지닌 글로벌 인재들이 모인 열린 커뮤니티입니다. 서로 소통하고 격려하며 새로운 학술적 발견을 선도합니다.
+          </p>
+          <div className="pt-2 flex justify-center items-center gap-4 text-[9px] font-mono text-slate-500 font-bold">
+            <span>Yonsei University</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#e40428]/35" />
+            <span>Korea</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#e40428]/35" />
+            <span>Biometamaterials Group</span>
+          </div>
+        </div>
+
+        {/* Complete Uncropped Group Photo with Full Opacity */}
+        <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 bg-white p-3 md:p-4 shadow-sm">
+          <img 
+            src={groupPhotoBg} 
+            alt="Yonsei Biometamaterials Team Group Photo" 
+            className="w-full h-auto rounded-2xl object-contain shadow-xs border border-slate-100"
+          />
+        </div>
       </div>
 
       {/* --- EXQUISITE GLASSMORPHIC PROFILE DRAWER/MODAL INTERACTION --- */}

@@ -21,7 +21,7 @@ export default function Professor() {
             animate={{ opacity: 1, x: 0 }}
             className="sticky top-24"
           >
-            <div className="aspect-[3/4] rounded-2xl overflow-hidden mb-8 border border-slate-100 shadow-2xl">
+            <div className="max-w-[180px] aspect-[3/4] rounded-2xl overflow-hidden mb-8 border border-slate-100 shadow-lg">
               <img 
                 src={professor.image}
                 className="w-full h-full object-cover" 

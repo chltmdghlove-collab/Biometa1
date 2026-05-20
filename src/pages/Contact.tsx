@@ -4,6 +4,7 @@ import SectionHeader from "../components/SectionHeader";
 import { Mail, MapPin, Send } from "lucide-react";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import SoapBubblePlayground from "../components/SoapBubblePlayground";
 
 export default function Contact() {
   const [formState, setFormState] = useState({ name: "", email: "", subject: "", message: "" });
@@ -50,6 +51,16 @@ export default function Contact() {
         subtitle="우리 연구실에 대해 궁금한 점이나 입학 상담, 공동 연구 문의는 아래의 연락처를 이용해 주세요."
       />
 
+      {/* Interactive Soap Bubble Playground Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="mb-20"
+      >
+        <SoapBubblePlayground />
+      </motion.div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
         {/* Contact Info & Map */}
         <div className="space-y-12">
@@ -79,19 +90,18 @@ export default function Contact() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="group relative rounded-3xl overflow-hidden shadow-lg border border-slate-100"
+            className="relative rounded-3xl overflow-hidden shadow-lg border border-slate-150 bg-slate-950 aspect-video w-full"
           >
-            <img 
-              src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=800" 
-              alt="Yonsei University Research Environment" 
-              className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-bottom p-8">
-              <p className="text-white text-sm font-medium self-end">
-                Biometamaterials Laboratory @ Yonsei University
-              </p>
-            </div>
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/_ZfZzhlVlWM"
+              title="Laboratory Research Introduction Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="w-full h-full"
+            ></iframe>
           </motion.div>
         </div>
 

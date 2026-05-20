@@ -24,6 +24,7 @@ import {
   Maximize2
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import newsBg from "../assets/images/news_bg.svg";
 
 // Preset Unsplash pictures for academic/group photos
 const PRESET_IMAGES = [
@@ -49,6 +50,13 @@ export default function News() {
   // Real-time cached lists
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [galleryList, setGalleryList] = useState<GalleryItem[]>([]);
+
+  const visibleNewsList = newsList.filter(
+    (item) => item.title && item.title.trim() !== ""
+  );
+  const visibleGalleryList = galleryList.filter(
+    (item) => item.image && item.image.trim() !== ""
+  );
   
   // Modal states for lightbox
   const [selectedGalleryItem, setSelectedGalleryItem] = useState<GalleryItem | null>(null);
@@ -67,7 +75,7 @@ export default function News() {
   const [content, setContent] = useState("");
   
   // Image handling (Local file or preset option)
-  const [imageOption, setImageOption] = useState<"upload" | "preset">("upload");
+  const [imageOption, setImageOption] = useState<"upload" | "preset" | "none">("upload");
   const [selectedPresetUrl, setSelectedPresetUrl] = useState(PRESET_IMAGES[0].url);
   const [uploadedBase64, setUploadedBase64] = useState<string>("");
   const [fileDragOver, setFileDragOver] = useState(false);
@@ -144,11 +152,19 @@ export default function News() {
     }
 
     if (creatorType === "news") {
+      let finalNewsImgUrl = "";
+      if (imageOption === "upload" && uploadedBase64) {
+        finalNewsImgUrl = uploadedBase64;
+      } else if (imageOption === "preset") {
+        finalNewsImgUrl = selectedPresetUrl;
+      }
+
       const newNewsItem: NewsItem = {
         id: `news_${Date.now()}`,
         title: title.trim(),
         date: date.replace(/-/g, "."),
-        content: content.trim()
+        content: content.trim(),
+        image: finalNewsImgUrl || undefined
       };
 
       const updated = [newNewsItem, ...newsList];
@@ -262,7 +278,10 @@ export default function News() {
                 <div className="grid grid-cols-2 gap-3 mb-6 p-1 bg-slate-200 border border-slate-350 rounded-xl max-w-sm">
                   <button
                     type="button"
-                    onClick={() => setCreatorType("gallery")}
+                    onClick={() => {
+                      setCreatorType("gallery");
+                      setImageOption("upload");
+                    }}
                     className={`py-2 text-xs font-bold rounded-lg transition-all ${
                       creatorType === "gallery" ? "bg-white text-slate-900 shadow" : "text-slate-500 hover:text-slate-800"
                     }`}
@@ -271,7 +290,10 @@ export default function News() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setCreatorType("news")}
+                    onClick={() => {
+                      setCreatorType("news");
+                      setImageOption("upload");
+                    }}
                     className={`py-2 text-xs font-bold rounded-lg transition-all ${
                       creatorType === "news" ? "bg-white text-slate-900 shadow" : "text-slate-500 hover:text-slate-800"
                     }`}
@@ -315,11 +337,13 @@ export default function News() {
                     />
                   </div>
 
-                  {creatorType === "gallery" && (
+                  {(creatorType === "gallery" || creatorType === "news") && (
                     <div className="p-4 bg-slate-100 border border-slate-200 rounded-xl space-y-4">
                       <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-                        <label className="text-xs font-mono text-slate-600 uppercase tracking-wider font-semibold">단체 이미지 선택 방법</label>
-                        <div className="flex gap-2">
+                        <label className="text-xs font-mono text-slate-600 uppercase tracking-wider font-semibold">
+                          {creatorType === "news" ? "뉴스 이미지 첨부 (선택)" : "단체 이미지 선택 방법"}
+                        </label>
+                        <div className="flex gap-2 flex-wrap">
                           <button
                             type="button"
                             onClick={() => setImageOption("upload")}
@@ -338,10 +362,28 @@ export default function News() {
                           >
                             견본 사진 채택
                           </button>
+                          {creatorType === "news" && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setImageOption("none");
+                                setUploadedBase64("");
+                              }}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                                imageOption === "none" ? "bg-[#e40428] text-white shadow-sm" : "bg-slate-200 text-slate-600 hover:text-slate-800"
+                              }`}
+                            >
+                              첨부 없음
+                            </button>
+                          )}
                         </div>
                       </div>
 
-                      {imageOption === "upload" ? (
+                      {imageOption === "none" ? (
+                        <div className="text-center py-4 bg-white/60 border border-dashed border-slate-200 rounded-xl">
+                          <p className="text-xs text-slate-400">이미지가 첨부되지 않는 일반 텍스트 뉴스 공지사항으로 등록됩니다.</p>
+                        </div>
+                      ) : imageOption === "upload" ? (
                         <div
                           onDragOver={handleDragOver}
                           onDragLeave={handleDragLeave}
@@ -368,14 +410,14 @@ export default function News() {
                                 <img src={uploadedBase64} alt="Preview" className="w-full h-full object-cover" />
                               </div>
                               <span className="text-xs text-emerald-600 font-bold flex items-center gap-1">
-                                <CheckCircle2 size={12} /> 단체 사진 분석 및 로드 완료
+                                <CheckCircle2 size={12} /> 이미지 분석 및 로드 완료
                               </span>
                               <span className="text-[10px] text-slate-500">클릭하여 다른 사진으로 대체</span>
                             </div>
                           ) : (
                             <div className="flex flex-col items-center gap-2 text-slate-500">
                               <Upload size={24} className="text-slate-400 mb-1" />
-                              <span className="text-xs font-medium">이곳에 멤버 단체 사진을 끌어다 놓거나 <span className="text-[#e40428] underline font-bold">클릭하여 선택</span></span>
+                              <span className="text-xs font-medium">이곳에 {creatorType === 'news' ? '뉴스 관련 이미지' : '멤버 단체 사진'}를 끌어다 놓거나 <span className="text-[#e40428] underline font-bold">클릭하여 선택</span></span>
                               <span className="text-[10px] text-slate-400">지원모델: JPG, PNG, GIF (최대 4.5MB)</span>
                             </div>
                           )}
@@ -454,7 +496,7 @@ export default function News() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newsList.map((item, i) => (
+            {visibleNewsList.map((item, i) => (
               <motion.div
                 key={item.id}
                 onClick={() => setSelectedNewsItem(item)}
@@ -476,17 +518,33 @@ export default function News() {
                   <X size={13} />
                 </button>
 
-                {/* Card Top: Matching aspect-video aesthetic with stylized notice design */}
+                 {/* Card Top: Matching aspect-video aesthetic with stylized notice design */}
                 <div className="relative aspect-video overflow-hidden bg-slate-50 border-b border-slate-100 flex items-center justify-center">
-                  <div className="absolute inset-0 bg-gradient-to-br from-rose-50 to-slate-100/50" />
-                  
-                  {/* Styled central visual icon */}
-                  <div className="relative flex flex-col items-center gap-1.5 z-10 text-center px-4">
-                    <div className="w-10 h-10 rounded-xl bg-rose-100 text-[#e40428] flex items-center justify-center border border-[#e40428]/10 group-hover:scale-[1.08] transition-transform duration-500">
-                      <FileText size={18} />
-                    </div>
-                    <span className="text-[9px] font-mono font-black text-[#e40428]/80 tracking-widest uppercase">LAB NOTICE</span>
-                  </div>
+                  {item.image ? (
+                    <>
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/60 to-transparent p-3 flex justify-between items-center z-10">
+                        <span className="px-2 py-0.5 bg-[#e40428] text-white text-[8px] font-bold tracking-wider rounded uppercase">INFO IMAGE</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 bg-gradient-to-br from-rose-50 to-slate-100/50" />
+                      
+                      {/* Styled central visual icon */}
+                      <div className="relative flex flex-col items-center gap-1.5 z-10 text-center px-4">
+                        <div className="w-10 h-10 rounded-xl bg-rose-100 text-[#e40428] flex items-center justify-center border border-[#e40428]/10 group-hover:scale-[1.08] transition-transform duration-500">
+                          <FileText size={18} />
+                        </div>
+                        <span className="text-[9px] font-mono font-black text-[#e40428]/80 tracking-widest uppercase">LAB NOTICE</span>
+                      </div>
+                    </>
+                  )}
 
                   {/* Subtle Interactive Signal HUD hover overlay */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-slate-950/45 backdrop-blur-xs transition-opacity duration-300 z-10">
@@ -519,7 +577,7 @@ export default function News() {
               </motion.div>
             ))}
 
-            {newsList.length === 0 && (
+            {visibleNewsList.length === 0 && (
               <div className="col-span-full text-center py-16 text-slate-400 border border-dashed border-slate-200 rounded-2xl bg-slate-50">
                 등록된 연구실 소식이 없습니다. 우측 상단의 '새 포스트 올리기'를 클릭해 공지사항을 작성해 보세요.
               </div>
@@ -543,7 +601,7 @@ export default function News() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {galleryList.map((item, i) => (
+            {visibleGalleryList.map((item, i) => (
               <motion.div
                 key={item.id}
                 onClick={() => setSelectedGalleryItem(item)}
@@ -603,13 +661,14 @@ export default function News() {
               </motion.div>
             ))}
 
-            {galleryList.length === 0 && (
+            {visibleGalleryList.length === 0 && (
               <div className="col-span-full text-center py-16 text-slate-400 border border-dashed border-slate-200 rounded-2xl bg-slate-50">
                 등록된 단체 활동 사진이 없습니다. 우측 상단의 '새 포스트 올리기'를 클릭해 아름다운 추억을 공유해 보세요.
               </div>
             )}
           </div>
         </div>
+
       </div>
 
       {/* Lightbox modal zoom viewing */}
@@ -646,6 +705,17 @@ export default function News() {
                 <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-6 leading-tight border-b border-slate-100 pb-4">
                   {selectedNewsItem.title}
                 </h3>
+
+                {selectedNewsItem.image && (
+                  <div className="mb-6 rounded-xl overflow-hidden border border-slate-200 bg-slate-950 aspect-video max-h-[300px] flex items-center justify-center">
+                    <img 
+                      src={selectedNewsItem.image} 
+                      alt={selectedNewsItem.title} 
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                )}
 
                 <p className="text-slate-700 text-sm sm:text-base leading-relaxed whitespace-pre-line font-light max-h-[320px] overflow-y-auto pr-2">
                   {selectedNewsItem.content}

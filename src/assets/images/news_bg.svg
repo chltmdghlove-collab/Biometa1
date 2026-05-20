@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="roseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="40%" stop-color="#fff8f8" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#fff0f1" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e40428" stop-opacity="0.05"/>
+      <stop offset="30%" stop-color="#e40428" stop-opacity="0.01"/>
+      <stop offset="70%" stop-color="#e40428" stop-opacity="0.01"/>
+      <stop offset="100%" stop-color="#e40428" stop-opacity="0.05"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="100%" r="60%">
+      <stop offset="0%" stop-color="#e40428" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Content Background -->
+  <rect width="1200" height="500" fill="url(#roseGrad)"/>
+  <rect width="1200" height="500" fill="url(#centerGlow)"/>
+  
+  <!-- Subtle Metamaterial Grid Pattern Overlay -->
+  <g opacity="0.35">
+    <path d="M0,50 L1200,50 M0,100 L1200,100 M0,150 L1200,150 M0,200 L1200,200 M0,250 L1200,250 M0,300 L1200,300 M0,350 L1200,350 M0,400 L1200,400 M0,450 L1200,450" stroke="#f6cacd" stroke-width="0.3" stroke-dasharray="3,6"/>
+    <path d="M100,0 L100,500 M200,0 L200,500 M300,0 L300,500 M400,0 L400,500 M500,0 L500,500 M600,0 L600,500 M700,0 L700,500 M800,0 L800,500 M900,0 L900,500 M1000,0 L1000,500 M1100,0 L1100,500" stroke="#f6cacd" stroke-width="0.3" stroke-dasharray="3,6"/>
+  </g>
+  
+  <!-- Abstract Team Silhouettes & Banner Frame (Matching the uploaded group photo exactly) -->
+  <g opacity="0.14" transform="translate(100, 110)">
+    <!-- Research Banner Frame -->
+    <rect x="180" y="30" width="640" height="15" rx="4" fill="#e40428" opacity="0.15"/>
+    <rect x="250" y="240" width="120" height="60" rx="3" fill="#e2e8f0" opacity="0.6"/> <!-- Left boxes (경품함 등) -->
+    <rect x="260" y="210" width="100" height="40" rx="2" fill="#cbd5e1" opacity="0.5"/>
+    
+    <!-- Group representation aligning with the photo of (~11-12 researchers) -->
+    <!-- Member 1 -->
+    <circle cx="340" cy="115" r="14" fill="#334155"/>
+    <path d="M322,135 C322,126 330,126 340,126 C350,126 358,126 358,135 L360,250 L320,250 Z" fill="#334155"/>
+    
+    <!-- Member 2 -->
+    <circle cx="380" cy="120" r="13.5" fill="#475569"/>
+    <path d="M364,139 C364,130 371,130 380,130 C389,130 396,130 396,139 L398,250 L362,250 Z" fill="#475569"/>
+    
+    <!-- Member 3 -->
+    <circle cx="420" cy="112" r="14.5" fill="#334155"/>
+    <path d="M401,131 C401,122 410,122 420,122 C430,122 439,122 439,131 L441,250 L399,250 Z" fill="#334155"/>
+    
+    <!-- Member 4 -->
+    <circle cx="460" cy="117" r="14" fill="#475569"/>
+    <path d="M442,136 C442,127 450,127 460,127 C470,127 478,127 478,136 L480,250 L440,250 Z" fill="#475569"/>
+    
+    <!-- Member 5 -->
+    <circle cx="500" cy="105" r="15" fill="#1e293b"/>
+    <path d="M480,125 C480,115 490,115 500,115 C510,115 520,115 520,125 L522,255 L478,255 Z" fill="#1e293b"/>
+    
+    <!-- Member 6 (Professor Choi centered) -->
+    <circle cx="540" cy="98" r="16" fill="#0f172a"/>
+    <path d="M518,118 C518,107 528,107 540,107 C552,107 562,107 562,118 L565,260 L515,260 Z" fill="#0f172a"/>
+    
+    <!-- Member 7 -->
+    <circle cx="580" cy="108" r="14.5" fill="#1e293b"/>
+    <path d="M561,127 C561,117 570,117 580,117 C590,117 599,117 599,127 L601,255 L559,255 Z" fill="#1e293b"/>
+    
+    <!-- Member 8 -->
+    <circle cx="620" cy="118" r="13.5" fill="#475569"/>
+    <path d="M604,137 C604,128 611,128 620,128 C629,128 636,128 636,137 L638,250 L602,250 Z" fill="#475569"/>
+    
+    <!-- Member 9 -->
+    <circle cx="660" cy="112" r="14" fill="#334155"/>
+    <path d="M642,131 C642,122 650,122 660,122 C670,122 678,122 678,131 L680,250 L640,250 Z" fill="#334155"/>
+    
+    <!-- Member 10 -->
+    <circle cx="700" cy="120" r="13.5" fill="#475569"/>
+    <path d="M684,139 C684,130 691,130 700,130 C709,130 716,130 716,139 L718,250 L682,250 Z" fill="#475569"/>
+    
+    <!-- Member 11 -->
+    <circle cx="740" cy="115" r="14" fill="#334155"/>
+    <path d="M722,135 C722,126 730,126 740,126 C750,126 758,126 758,135 L760,250 L720,250 Z" fill="#334155"/>
+    
+    <!-- Member 12 -->
+    <circle cx="780" cy="110" r="13" fill="#1e293b"/>
+    <path d="M763,129 C763,121 771,121 780,121 C789,121 797,121 797,129 L799,250 L761,250 Z" fill="#1e293b"/>
+  </g>
+  
+  <!-- Subtle Metamaterial Waves at the Bottom Border -->
+  <path d="M-100,430 Q100,380 300,420 T700,400 T1100,430 T1500,410 L1500,500 L-100,500 Z" fill="url(#accentGrad)"/>
+</svg>

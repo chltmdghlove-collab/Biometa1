@@ -6,8 +6,10 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
         <div>
           <h3 className="text-lg font-bold text-primary mb-4">Biometamaterials Lab</h3>
-          <p className="text-sm text-slate-500 leading-relaxed mb-6">
-            Innovative solutions through bio-inspired metamaterials and advanced biotechnology.
+          <p className="text-sm text-slate-500/90 italic tracking-wide leading-relaxed mb-6 whitespace-pre-line">
+            “Where must we go…
+            we who wander this wasteland
+            in search of our better selves.”
           </p>
           <div className="text-xs text-slate-400">
             &copy; {new Date().getFullYear()} Biometamaterials Lab. All rights reserved.

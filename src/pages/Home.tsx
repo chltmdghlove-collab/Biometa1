@@ -77,13 +77,13 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="lg:col-span-7 flex flex-col justify-center text-left"
+              className="lg:col-span-7 flex flex-col justify-center text-left relative z-10"
             >
               <div className="inline-block self-start px-3 py-1 bg-primary text-white text-xs font-bold tracking-[0.2em] uppercase mb-6 rounded-xs">
                 Welcome to Biometamaterials Lab
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-[53px] font-bold text-white leading-tight mb-8">
-                {labData.vision}
+                BIOMETAMATERIALS FOR PRECISION MEDICINE
               </h1>
               <p className="text-sm md:text-base lg:text-lg text-slate-300/90 mb-10 leading-relaxed font-light max-w-2xl">
                 {labData.subtitle}
@@ -103,7 +103,7 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.94 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="lg:col-span-5 w-full h-[360px] sm:h-[450px] lg:h-[520px] relative rounded-2xl overflow-hidden bg-transparent"
+              className="lg:col-span-5 w-full lg:w-[120%] lg:max-w-none h-[432px] sm:h-[540px] lg:h-[624px] relative rounded-2xl overflow-hidden bg-transparent lg:translate-x-10 xl:translate-x-16 z-0"
             >
               <BiometamaterialVisualizer />
             </motion.div>
@@ -120,7 +120,7 @@ export default function Home() {
                 <span className="w-6 h-[2px] bg-primary"></span>
                 Selected Publications
               </div>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">수수하고 혁신적인 대표 연구성과</h2>
+              <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Research Highlights</h2>
               <p className="text-slate-500 font-light text-sm">
                 Nature Communications를 포함한 글로벌 최고 권위의 저널에 게재된 Biometamaterials 연구실의 대표 논문들입니다.
               </p>
@@ -465,7 +465,29 @@ export default function Home() {
                 viewport={{ once: true }}
                 className="relative group overflow-hidden rounded-2xl aspect-[4/5]"
               >
-                <img src={field.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={field.title} />
+                {field.image && (
+                  field.image.toLowerCase().endsWith('.mov') || 
+                  field.image.toLowerCase().endsWith('.mp4') || 
+                  field.image.toLowerCase().endsWith('.webm') || 
+                  field.image.toLowerCase().includes('.mov?') || 
+                  field.image.toLowerCase().includes('.mp4?') || 
+                  field.image.toLowerCase().includes('meta.mov')
+                ) ? (
+                  <video 
+                    src={field.image} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline 
+                  />
+                ) : (
+                  <img 
+                    src={field.image} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    alt={field.title} 
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent p-8 flex flex-col justify-end">
                   <h3 className="text-xl font-bold text-white mb-2">{field.title}</h3>
                   <p className="text-slate-300 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

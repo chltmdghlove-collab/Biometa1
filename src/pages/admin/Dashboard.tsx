@@ -38,6 +38,7 @@ export default function AdminDashboard() {
   });
   const [newContent, setNewContent] = useState("");
   const [newImage, setNewImage] = useState("");
+  const [uploadMode, setUploadMode] = useState<"file" | "url">("file");
   
   // Notice / publications states (local read/write)
   const [localPubs, setLocalPubs] = useState(() => {
@@ -102,7 +103,8 @@ export default function AdminDashboard() {
         id: `news_${Date.now()}`,
         title: newTitle.trim(),
         date: newDate.replace(/-/g, "."),
-        content: newContent.trim()
+        content: newContent.trim(),
+        image: newImage.trim() || undefined
       };
       const updatedList = [newItem, ...getSavedNews()];
       saveNews(updatedList);
@@ -296,8 +298,8 @@ export default function AdminDashboard() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className={activeTab === 'gallery' || activeTab === 'news' ? "sm:col-span-2" : "col-span-2"}>
                   <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1">날짜 / 년학기 *</label>
                   <input
                     type="text"
@@ -308,16 +310,83 @@ export default function AdminDashboard() {
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#e40428] transition-colors"
                   />
                 </div>
-                {activeTab === 'gallery' && (
-                  <div>
-                    <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1">사진 URL (선택)</label>
-                    <input
-                      type="text"
-                      value={newImage}
-                      onChange={(e) => setNewImage(e.target.value)}
-                      placeholder="기본 이미지 자동 배포"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#e40428] transition-colors"
-                    />
+                {(activeTab === 'gallery' || activeTab === 'news') && (
+                  <div className="sm:col-span-2 p-3.5 bg-slate-950/60 border border-slate-800/85 rounded-xl space-y-3">
+                    <div className="flex justify-between items-center">
+                      <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                        {activeTab === 'news' ? '공지용 이미지 첨부' : '갤러리 단체사진 첨부'}
+                      </label>
+                      <div className="flex gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUploadMode("file");
+                          }}
+                          className={`px-2 py-0.5 text-[9px] font-bold rounded transition-all ${
+                            uploadMode === "file" ? "bg-[#e40428] text-white shadow-sm" : "bg-slate-800 text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          파일 업로드
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUploadMode("url");
+                          }}
+                          className={`px-2 py-0.5 text-[9px] font-bold rounded transition-all ${
+                            uploadMode === "url" ? "bg-[#e40428] text-white shadow-sm" : "bg-slate-800 text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          이미지 URL
+                        </button>
+                      </div>
+                    </div>
+
+                    {uploadMode === "file" ? (
+                      <div 
+                        onClick={() => document.getElementById("admin-file-upload")?.click()}
+                        className="border border-dashed border-slate-800 hover:border-slate-700 bg-slate-900 rounded-lg p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 min-h-[90px]"
+                      >
+                        <input 
+                          id="admin-file-upload"
+                          type="file" 
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                if (typeof reader.result === "string") {
+                                  setNewImage(reader.result);
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                        {newImage && newImage.startsWith("data:") ? (
+                          <div className="flex flex-col items-center gap-1.5">
+                            <img src={newImage} alt="uploaded" className="w-20 h-12 object-cover rounded border border-white/10 shadow" />
+                            <span className="text-[10px] text-emerald-400 font-bold">✓ 이미지 업로드 완료</span>
+                            <span className="text-[9px] text-slate-500">클릭하여 다른 이미지로 대체</span>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="text-[10px] font-bold text-slate-300">이곳을 클릭해 이미지 파일 선택</div>
+                            <div className="text-[8px] text-slate-500">지원모델: JPG, PNG, GIF 파일</div>
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <input
+                        type="text"
+                        value={newImage}
+                        onChange={(e) => setNewImage(e.target.value)}
+                        placeholder={activeTab === 'news' ? "예: https://example.com/photo.jpg (빈칸 가능)" : "예: https://example.com/photo.jpg"}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#e40428] transition-colors"
+                      />
+                    )}
                   </div>
                 )}
               </div>

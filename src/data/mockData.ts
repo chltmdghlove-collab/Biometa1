@@ -4,6 +4,15 @@ import ediblePUF from "../assets/images/paper_edible_puf.png";
 import necklacesLasing from "../assets/images/paper_necklaces_lasing.png";
 import greenSilkPhoto from "../assets/images/paper_green_silk.png";
 import randomLasingMeta from "../assets/images/paper_random_lasing.png";
+import profileChoi from "../assets/images/choi_27.jpg";
+import top50Paper from "../assets/images/top50.png";
+import andersonEzSimulation from "../assets/images/anderson_localization_simulation.png";
+import insectIndustryHubComplex from "../assets/images/insect_industry_hub_complex.png";
+import chitosanImage from "../assets/images/chitosan.png";
+import silk1 from "../assets/images/silk1.png";
+import silk from "../assets/images/silk.png";
+import metaGif from "../assets/images/Meta.gif";
+import metaMov from "../assets/images/meta.mov";
 
 export interface Member {
   id: string;
@@ -26,6 +35,7 @@ export interface Publication {
   journal: string;
   link?: string;
   image?: string;
+  extraImage?: string;
   isSelected?: boolean;
 }
 
@@ -33,6 +43,7 @@ export interface ResearchField {
   id: string;
   title: string;
   description: string;
+  details: string;
   image: string;
 }
 
@@ -41,6 +52,7 @@ export interface NewsItem {
   date: string;
   title: string;
   content: string;
+  image?: string;
 }
 
 export interface GalleryItem {
@@ -61,7 +73,7 @@ export const labData = {
     title: "부교수, 의공학부",
     email: "seunghochoi@yonsei.ac.kr",
     dateOfBirth: "1982.12.06",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
+    image: profileChoi,
     greeting: "환영합니다. Biometamaterials 연구실은 기술의 한계를 넘어 인류의 건강한 삶을 위한 새로운 물질을 탐구합니다. 호기심 많고 열정적인 학생들의 참여를 기다립니다.",
     biography: [
       "Ph.D. in Weldon School of Biomedical Engineering, Purdue University (2016.5)",
@@ -79,21 +91,24 @@ export const labData = {
   researchFields: [
     {
       id: "f1",
-      title: "Bio-inspired Metamaterials",
+      title: "Biological Metamaterials",
       description: "자연계의 미세 구조를 모사하여 기계적, 광학적 특성을 조절하는 인공 재료 연구",
-      image: "https://images.unsplash.com/photo-1532187863486-abf51ad990d9?auto=format&fit=crop&q=80&w=600"
+      details: "본 분야에서는 자연계의 광학적 메커니즘을 심도 있게 분석하고, 이를 인공적인 나노/마이크로 구조체에 이식하여 극도의 물성 제어를 달성하는 것을 목표로 합니다. 특히 생체 적합성 고분자와 하이드로젤을 메타물질 구조와 결합하여, 인체 내부의 복잡한 물리적 신호를 모방하거나 제어하는 원천 기술을 확보하고 있습니다.",
+      image: metaMov
     },
     {
       id: "f2",
-      title: "Tissue Engineering Scaffold",
-      description: "3D 프린팅 기술을 활용한 조직 재구축용 생분해성 지지체 개발",
-      image: "https://images.unsplash.com/photo-1579154235602-3c2c299e0831?auto=format&fit=crop&q=80&w=600"
+      title: "Chitosan Wearable Biointerfaces",
+      description: "곤충 유래 키토산을 기반으로 생체신호 계측과 피부 부착형 헬스케어 구현을 위한 지속가능 웨어러블 디바이스 플랫폼 연구",
+      details: "본 분야에서는 갈색거저리 등 곤충 바이오매스에서 유래한 키틴·키토산을 활용하여 차세대 웨어러블 디바이스용 생체인터페이스 소재를 개발하는 것을 목표로 합니다. 키토산의 생체적합성, 생분해성, 필름 형성능, 이온전도성, 표면개질 가능성을 기반으로 피부 부착형 센서, 유연 생체전극, 호흡·심음·습도·pH·변형률 모니터링 디바이스 등 다양한 생체신호 계측 플랫폼을 구현하고 있습니다. 또한 곤충 부산물을 고부가가치 바이오소재로 전환함으로써, 인체 친화적이면서도 환경 지속가능성을 갖춘 웨어러블 헬스케어 디바이스, 의료용 필름 및 하이드로젤, 스마트 바이오센서 기판으로 확장 가능한 실용화 중심의 원천기술을 확보하고 있습니다.",
+      image: chitosanImage
     },
     {
       id: "f3",
-      title: "Nanomedicine Delivery",
-      description: "특수한 물리적 환경에 반응하여 약물을 방출하는 스마트 나노 입자 연구",
-      image: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&q=80&w=600"
+      title: "Silk-Based Biogenic Photonics",
+      description: "실크 단백질의 생체적합성을 활용하여 생체유래 광소재 연구",
+      details: "본 분야에서는 실크 피브로인 단백질을 단순한 생체재료가 아니라, 빛을 제어할 수 있는 생체유래 광학 플랫폼으로 재해석하는 것을 목표로 합니다. 실크의 나노피브릴 구조, 결정화도, 광투명성, 기계적 안정성, 생분해성을 정밀하게 조절하여 생체 내부에서도 사용 가능한 이식형 인터페이스를 개발하고 있습니다.",
+      image: silk
     }
   ],
   members: [
@@ -298,7 +313,6 @@ export const labData = {
       authors: "Seung Ho Choi, Seong-Wan Kim, Zahyun Ku, Michelle A. Visbal Onufrak, Seong-Ryul Kim, Kwang-Ho Choi, Hakseok Ko, Wonshik Choi, Augustine M. Urbas, Tae-Won Goo, and Young L. Kim",
       title: "Anderson light localization in biological nanostructures of native silk",
       journal: "Nature Communications, vol. 9, pp. 452",
-      link: "https://www.nature.com/articles/s41467-018-02877-y",
       image: andersonSilk,
       isSelected: true
     },
@@ -661,43 +675,8 @@ export const labData = {
       journal: "Applied Optics, vol. 48, pp. 2924-2931"
     }
   ] as Publication[],
-  news: [
-    {
-      id: "n1",
-      date: "2026.05.15",
-      title: "최승호 교수, 의계광학 및 바이오포토닉스 학술대회 초청강연",
-      content: "의공학부 최승호 교수가 2026 의계광학 학술제에 초청받아 '생체 메타물질 내 Anderson 광 국소화의 원리와 정밀의료의 미래'를 주제로 세미나 발표를 진행하였습니다."
-    },
-    {
-      id: "n2",
-      date: "2026.04.10",
-      title: "2026년 후기 신입 대학원생 모집 안내 (석·박사 통합과정)",
-      content: "본 연구실에서 생체재료, 나노포토닉스, 의공학 분야 연구를 함께 이어나갈 전일제 대학원 신입생을 모집합니다. 학부생 연구참여(인턴십) 프로그램도 진행 중이오니 편하게 지원 바랍니다."
-    }
-  ] as NewsItem[],
-  gallery: [
-    {
-      id: "g1",
-      date: "2026.05.10",
-      title: "2026년 봄학기 연구실 단체 야유회 및 세미나",
-      content: "캠퍼스 야외 잔디밭에서 봄맞이 점심 피크닉을 갖고 신규 연구 과제 아이디어 및 상반기 진행 성과 공유를 위한 통합 세미나를 진행했습니다. 모든 멤버들이 한자리에 모여 뜻깊은 시간을 보냈습니다.",
-      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
-    },
-    {
-      id: "g2",
-      date: "2026.04.18",
-      title: "춘계 의공학 정기 공동 학술세미나 발표 및 기념조",
-      content: "저희 연구실 대학원 멤버들이 이번 춘계 학술대회 세션에 대거 참여하여 우수한 리서치 포스터를 발표했습니다. 활발한 학문적 논의 후, 다 함께 기념사진을 남겼습니다.",
-      image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200"
-    },
-    {
-      id: "g3",
-      date: "2026.03.02",
-      title: "신임 연구 멤버 환영식 & 랩 마일스톤 데이 정기 회식",
-      content: "새롭게 합류하게 된 연구원 및 인턴 학생들을 축하하고 올 한 해 추진할 원대한 연구 이정표 달성을 다짐하는 연구실 정기 회식을 가졌습니다. 새로운 학기에도 멋진 패러다임을 열어갑니다!",
-      image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1200"
-    }
-  ] as GalleryItem[],
+  news: [] as NewsItem[],
+  gallery: [] as GalleryItem[],
   collaborators: [
     { name: "AFRL (Air Force Research Lab)", id: "afrl" },
     { name: "한국연구재단 (NRF)", id: "nrf" },
@@ -720,7 +699,15 @@ export function getSavedNews(): NewsItem[] {
   const data = localStorage.getItem("lab_news");
   if (data) {
     try {
-      return JSON.parse(data);
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed)) {
+        // Filter out empty items or deprecated placeholders
+        const filtered = parsed.filter(item => item.title && item.title.trim() !== "");
+        if (filtered.length !== parsed.length) {
+          localStorage.setItem("lab_news", JSON.stringify(filtered));
+        }
+        return filtered;
+      }
     } catch (e) {
       // ignore
     }
@@ -733,15 +720,8 @@ export function saveNews(newsList: NewsItem[]): void {
 }
 
 export function getSavedGallery(): GalleryItem[] {
-  const data = localStorage.getItem("lab_gallery");
-  if (data) {
-    try {
-      return JSON.parse(data);
-    } catch (e) {
-      // ignore
-    }
-  }
-  return [...labData.gallery];
+  localStorage.removeItem("lab_gallery");
+  return [];
 }
 
 export function saveGallery(galleryList: GalleryItem[]): void {
