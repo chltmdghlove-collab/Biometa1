@@ -3,6 +3,7 @@ import { ArrowRight, Beaker, Users, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { labData } from "../data/mockData";
 import { Helmet } from "react-helmet-async";
+import ResearchSlides from "../components/ResearchSlides";
 
 export default function Home() {
   return (
@@ -17,13 +18,13 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=2000" 
-            className="w-full h-full object-cover opacity-30 grayscale"
+            className="w-full h-full object-cover opacity-40 grayscale hover:grayscale-0 transition-all duration-1000"
             alt="Lab Background"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent"></div>
         </div>
 
-        <div className="section-padding relative z-10 w-full">
+        <div className="section-padding relative z-10 w-full max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -111,6 +112,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Research Slides Section */}
+      <ResearchSlides />
 
       {/* Latest News CTA */}
       <section className="bg-slate-50 py-20">

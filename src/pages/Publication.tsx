@@ -16,7 +16,16 @@ export default function Publication() {
 
       <SectionHeader 
         title="Publications" 
-        subtitle="우리의 연구 성과는 세계 유수의 학술지에 게재되어 그 가치를 인정받고 있습니다."
+        subtitle={
+          <a
+            href={labData.professor.googleScholar}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-mono font-semibold text-[#5046e5] hover:text-[#3b32c4] transition-colors break-all underline underline-offset-4"
+          >
+            {labData.professor.googleScholar} ↗
+          </a>
+        }
       />
 
       {/* Selected Publications */}
@@ -26,29 +35,55 @@ export default function Publication() {
             <Star className="text-primary fill-primary" size={20} />
             <h3 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Selected Publications</h3>
           </div>
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-8">
             {selectedPubs.map((pub, i) => (
               <motion.div
                 key={`sel-${pub.id}`}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="p-8 bg-white border-l-4 border-primary shadow-sm hover:shadow-md transition-shadow"
+                className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100"
               >
-                <div className="flex flex-col md:flex-row justify-between gap-4">
-                  <div className="flex-grow">
-                    <div className="text-primary font-bold text-sm mb-2">{pub.journal} ({pub.year})</div>
-                    <h4 className="text-xl font-bold text-slate-900 mb-2 leading-tight">{pub.title}</h4>
-                    <p className="text-slate-500 font-medium italic">{pub.authors}</p>
-                  </div>
-                  {pub.link && (
-                    <div className="flex-shrink-0">
-                      <a href={pub.link} className="flex items-center text-sm font-bold text-primary hover:underline">
-                        VIEW DOI <ExternalLink size={14} className="ml-1.5" />
-                      </a>
+                <div className="flex flex-col md:flex-row h-full">
+                  {pub.image && (
+                    <div className="md:w-72 lg:w-96 flex-shrink-0 overflow-hidden relative border-r border-slate-100">
+                      <img 
+                        src={pub.image} 
+                        alt={pub.title}
+                        className="w-full h-48 md:h-full object-contain bg-slate-50 transition-transform duration-500 group-hover:scale-105"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors"></div>
                     </div>
                   )}
+                  <div className="flex-grow p-8 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider rounded-full">
+                          {pub.journal}
+                        </span>
+                        <span className="text-slate-400 text-xs font-medium">{pub.year}</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-slate-900 mb-4 leading-tight group-hover:text-primary transition-colors">
+                        {pub.title}
+                      </h4>
+                      <p className="text-slate-500 font-medium italic text-sm mb-6">{pub.authors}</p>
+                    </div>
+                    {pub.link && (
+                      <div className="flex justify-end">
+                        <a 
+                          href={pub.link} 
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-xs font-bold text-slate-900 hover:text-primary transition-colors group/link"
+                        >
+                          VIEW PUBLICATION 
+                          <ExternalLink size={14} className="ml-2 transition-transform group-hover/link:translate-x-1" />
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             ))}

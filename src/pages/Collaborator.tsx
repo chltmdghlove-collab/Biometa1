@@ -3,6 +3,42 @@ import { labData } from "../data/mockData";
 import SectionHeader from "../components/SectionHeader";
 import { Helmet } from "react-helmet-async";
 
+// Import real uploaded logo images
+import afrlLogo from "../assets/images/AFRL.png";
+import nrfLogo from "../assets/images/연구재단.gif";
+import rdaLogo from "../assets/images/농촌진흥청.png";
+import gangwonLogo from "../assets/images/강원특별자치도.gif";
+import lgCnsLogo from "../assets/images/LG CNS.png";
+import mezooLogo from "../assets/images/메쥬.png";
+import koreaNovaLogo from "../assets/images/코리아 노바.png";
+import todocLogo from "../assets/images/토닥.png";
+import medianaLogo from "../assets/images/메디아나.png";
+
+const getLogoSrc = (id: string) => {
+  switch (id) {
+    case "afrl":
+      return afrlLogo;
+    case "nrf":
+      return nrfLogo;
+    case "rda":
+      return rdaLogo;
+    case "gangwon":
+      return gangwonLogo;
+    case "lgcns":
+      return lgCnsLogo;
+    case "mezoo":
+      return mezooLogo;
+    case "koreanova":
+      return koreaNovaLogo;
+    case "todoc":
+      return todocLogo;
+    case "mediana":
+      return medianaLogo;
+    default:
+      return null;
+  }
+};
+
 export default function Collaborator() {
   return (
     <div className="section-padding">
@@ -11,38 +47,45 @@ export default function Collaborator() {
       </Helmet>
 
       <SectionHeader 
-        title="Global Partners" 
-        subtitle="우리는 세계적인 연구 기관 및 혁신 기업들과 협력하여 기술의 가치를 극대화합니다."
+        title="국내외 협력 연구기관 및 기업" 
+        subtitle="우리는 국내외 연구 기관 및 기업들과 협력하여 기술을 실생활에 적용합니다."
         centered
       />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-20 max-w-7xl mx-auto">
         {labData.collaborators.map((partner, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.08, duration: 0.5 }}
             viewport={{ once: true }}
-            className="flex flex-col items-center justify-center p-12 bg-white border border-slate-100 rounded-3xl hover:border-primary/20 hover:shadow-lg transition-all group"
+            className="flex flex-col items-center justify-between p-10 bg-white border border-slate-100 rounded-3xl hover:border-indigo-600/20 hover:shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-300 group min-h-[220px]"
           >
-            <div className="text-6xl mb-6 grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110">
-              {partner.logo}
+            <div className="w-full flex-grow flex items-center justify-center p-4 transition-all duration-500 transform group-hover:scale-[1.03]">
+              {getLogoSrc(partner.id) ? (
+                <img
+                  src={getLogoSrc(partner.id)!}
+                  alt={partner.name}
+                  className="max-h-20 max-w-full object-contain transition-all duration-300 filter group-hover:drop-shadow-[0_4px_12px_rgba(0,0,0,0.03)]"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <span className="text-sm font-black text-slate-800 leading-tight">
+                  {partner.name}
+                </span>
+              )}
             </div>
-            <h4 className="text-sm font-bold text-slate-400 group-hover:text-slate-900 transition-colors uppercase tracking-widest text-center">
-              {partner.name}
-            </h4>
+            <div className="w-full text-center mt-6 pt-6 border-t border-slate-50">
+              <h4 className="text-xs font-bold text-slate-400 group-hover:text-indigo-600 transition-colors uppercase tracking-widest leading-none">
+                {partner.name}
+              </h4>
+            </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="mt-32 p-12 bg-primary/5 rounded-3xl text-center">
-        <h3 className="text-2xl font-bold text-slate-900 mb-6 font-primary">Open Collaboration</h3>
-        <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          Biometamaterials 연구실은 새로운 공동 연구 및 산학 협력을 언제나 환영합니다. 
-          우리의 플랫폼 기술을 활용한 새로운 프로젝트 제안이 있으시다면 언제든 연락 부탁드립니다.
-        </p>
-      </div>
+
     </div>
   );
 }

@@ -1,6 +1,8 @@
+import { ReactNode } from "react";
+
 interface SectionHeaderProps {
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   centered?: boolean;
 }
 

@@ -23,13 +23,12 @@ export default function Professor() {
           >
             <div className="aspect-[3/4] rounded-2xl overflow-hidden mb-8 border border-slate-100 shadow-2xl">
               <img 
-                src={professor.image} 
+                src={professor.image}
                 className="w-full h-full object-cover" 
-                alt={professor.name}
+                alt={professor.englishName}
               />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">{professor.englishName}</h1>
-            <p className="text-primary font-bold mb-4">{professor.title}</p>
+            <h1 className="text-3xl font-bold text-slate-900 mb-6">{professor.englishName}</h1>
             
             <div className="space-y-4 border-t border-slate-100 pt-6">
               <div className="flex items-center text-slate-600">
@@ -48,22 +47,11 @@ export default function Professor() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <SectionHeader title="Greeting" />
-            <p className="text-xl text-slate-600 leading-relaxed font-light italic">
-              "{professor.greeting}"
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
             <SectionHeader title="Education" />
             <div className="space-y-4">
               {professor.biography.map((edu, i) => (
                 <div key={i} className="flex items-start">
-                  <div className="mt-1 mr-4 text-primary">
+                  <div className="mt-1 mr-3 text-primary">
                     <GraduationCap size={20} />
                   </div>
                   <p className="text-slate-700 leading-loose">{edu}</p>
@@ -75,13 +63,13 @@ export default function Professor() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.1 }}
           >
             <SectionHeader title="Professional Career" />
             <div className="space-y-4">
               {professor.careers.map((career, i) => (
                 <div key={i} className="flex items-start">
-                  <div className="mt-1 mr-4 text-primary">
+                  <div className="mt-1 mr-3 text-primary">
                     <Briefcase size={20} />
                   </div>
                   <p className="text-slate-700 leading-loose">{career}</p>

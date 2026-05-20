@@ -1,19 +1,42 @@
 import { motion } from "motion/react";
 import { labData } from "../data/mockData";
 import SectionHeader from "../components/SectionHeader";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, MapPin, Send } from "lucide-react";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 
 export default function Contact() {
   const [formState, setFormState] = useState({ name: "", email: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formState);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        setFormState({ name: "", email: "", subject: "", message: "" });
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        setError(data.message || "전송에 실패했습니다. 다시 시도해 주세요.");
+      }
+    } catch (err) {
+      setError("서버와의 통신에 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,26 +73,26 @@ export default function Contact() {
                 <p className="text-slate-600 leading-relaxed">{labData.contact.email}</p>
               </div>
             </div>
-
-            <div className="flex items-start">
-              <div className="p-3 bg-primary/10 text-primary rounded-lg mr-6">
-                <Phone size={24} />
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-slate-900 mb-1">Telephone</h4>
-                <p className="text-slate-600 leading-relaxed">{labData.contact.phone}</p>
-              </div>
-            </div>
           </div>
 
-          <div className="h-80 bg-slate-100 rounded-3xl overflow-hidden relative border border-slate-200">
-            {/* Map Placeholder */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50 text-slate-400 p-8 text-center">
-              <MapPin size={48} className="mb-4 opacity-20" />
-              <p className="font-medium">지도 API 연결 예정 (Google Maps/Kakao Maps)</p>
-              <p className="text-xs mt-2">{labData.contact.address}</p>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="group relative rounded-3xl overflow-hidden shadow-lg border border-slate-100"
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=800" 
+              alt="Yonsei University Research Environment" 
+              className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-bottom p-8">
+              <p className="text-white text-sm font-medium self-end">
+                Biometamaterials Laboratory @ Yonsei University
+              </p>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Application/Inquiry Form */}
@@ -114,6 +137,7 @@ export default function Contact() {
               >
                 <option value="">문의 유형 선택</option>
                 <option value="admission">대학원 신입생 지원 (Admission)</option>
+                <option value="internship">학부 연구생 지원 (Undergraduate Internship)</option>
                 <option value="research">공동 연구 제안 (Collaboration)</option>
                 <option value="visit">Lab Tour/방문 문의</option>
                 <option value="etc">기타 문의</option>
@@ -132,12 +156,16 @@ export default function Contact() {
               ></textarea>
             </div>
 
+            {error && (
+              <p className="text-sm text-red-500 font-medium px-1">{error}</p>
+            )}
+
             <button 
               type="submit" 
-              className="w-full btn-primary flex justify-center items-center py-4 text-lg"
-              disabled={submitted}
+              className="w-full btn-primary flex justify-center items-center py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={submitted || loading}
             >
-              {submitted ? "전송 완료!" : (
+              {loading ? "전송 중..." : submitted ? "전송 완료!" : (
                 <>
                   Send Message <Send size={18} className="ml-2" />
                 </>

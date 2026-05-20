@@ -38,6 +38,40 @@ async function startServer() {
     }
   });
 
+  app.post("/api/contact", async (req, res) => {
+    const { name, email, subject, message } = req.body;
+    const recipient = "chltmdghlove@gmail.com";
+
+    console.log(`[Contact Form] Received message from ${name} (${email}): ${subject}`);
+
+    try {
+      if (process.env.RESEND_API_KEY) {
+        const { Resend } = await import("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        
+        await resend.emails.send({
+          from: "onboarding@resend.dev", // Note: The user will need to configure their domain in Resend for real production use
+          to: recipient,
+          subject: `[Biometa Lab Inquiry] ${subject || "No Subject"}`,
+          text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+        });
+        
+        res.json({ success: true, message: "문의가 성공적으로 전송되었습니다." });
+      } else {
+        // Fallback for when API keys are not set yet
+        console.warn("RESEND_API_KEY is not set. Email not sent, but received the inquiry.");
+        res.json({ 
+          success: true, 
+          message: "문의가 접수되었습니다. (API 키 설정 대기 중)",
+          preview: { name, email, subject, message, recipient }
+        });
+      }
+    } catch (error: any) {
+      console.error("Failed to send email:", error);
+      res.status(500).json({ success: false, message: "서버 오류로 전송에 실패했습니다." });
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

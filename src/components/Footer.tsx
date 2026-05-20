@@ -16,10 +16,10 @@ export default function Footer() {
         
         <div>
           <h4 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider">Contact Us</h4>
-          <ul className="space-y-2 text-sm text-slate-600">
-            <li>{labData.contact.address}</li>
-            <li>TEL: {labData.contact.phone}</li>
-            <li>EMAIL: {labData.contact.email}</li>
+          <ul className="space-y-1 text-[13px] text-slate-600">
+            <li>Yonsei University</li>
+            <li>1 Yonseidae-gil, Room 202</li>
+            <li>Wonju, Gangwon-do 26493</li>
           </ul>
         </div>
 

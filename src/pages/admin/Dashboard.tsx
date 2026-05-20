@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { labData } from "../../data/mockData";
-import { LogOut, Plus, Edit, Trash2, Save, Newspaper, Users, BookOpen } from "lucide-react";
+import { LogOut, Plus, Edit, Trash2, Save, Newspaper, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'news' | 'members' | 'pubs'>('news');
+  const [activeTab, setActiveTab] = useState<'news' | 'pubs'>('news');
   const [items, setItems] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -14,7 +14,6 @@ export default function AdminDashboard() {
     if (!token) navigate("/admin");
 
     if (activeTab === 'news') setItems([...labData.news]);
-    if (activeTab === 'members') setItems([...labData.members]);
     if (activeTab === 'pubs') setItems([...labData.publications]);
   }, [activeTab, navigate]);
 
@@ -49,7 +48,6 @@ export default function AdminDashboard() {
         <div className="lg:col-span-3 space-y-2">
           {[
             { id: 'news', label: 'News Management', icon: <Newspaper size={18} /> },
-            { id: 'members', label: 'Member List', icon: <Users size={18} /> },
             { id: 'pubs', label: 'Publications', icon: <BookOpen size={18} /> },
           ].map((item) => (
             <button
@@ -71,7 +69,7 @@ export default function AdminDashboard() {
         <div className="lg:col-span-9 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
             <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider">
-              {activeTab === 'news' ? 'News' : activeTab === 'members' ? 'Members' : 'Publications'} List
+              {activeTab === 'news' ? 'News' : 'Publications'} List
             </h2>
             <button className="btn-primary flex items-center text-xs py-2">
               <Plus size={14} className="mr-1" /> Add New Item
